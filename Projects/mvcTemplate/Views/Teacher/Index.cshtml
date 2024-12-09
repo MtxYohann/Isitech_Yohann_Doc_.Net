@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model IEnumerable<Teacher>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Teacher Page</h1>
+</div>
+<ul>
+    @foreach (var teacher in Model)
+    {
+        <li>@teacher.Firstname @teacher.Lastname @teacher.Age ans Material: @teacher.Material</li>
+    }
+</ul>
