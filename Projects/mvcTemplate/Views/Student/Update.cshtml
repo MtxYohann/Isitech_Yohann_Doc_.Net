@@ -30,11 +30,16 @@
         </div>
         <div class="form-group">
             <label asp-for="Major"></label>
-            <input asp-for="Major" class="form-control" value="@Model.Major" />
+            <select asp-for="Major">
+                <option value="">--Please choose an option--</option>
+                <option asp-for="Major">CS</option>
+                <option asp-for="Major">IT</option>
+                <option asp-for="Major">MATHS</option>
+                <option asp-for="Major">OTHER</option>
+            </select>
             <span asp-validation-for="Major" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">
-            <Address> Student</Address>
-        </button>
+        <input type="submit" class="btn btn-primary" value="Update student" />
+
     </form>
 </div>

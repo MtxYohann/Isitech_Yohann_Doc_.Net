@@ -1,4 +1,3 @@
-using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
 
@@ -14,10 +13,14 @@ public class StudentController : Controller
     };
 
     // GET: StudentController
-    public ActionResult Index()
+    [HttpGet]
+    public IActionResult Index()
     {
         return View(students);
     }
+
+    // Afficher le détails d'un Student
+    [HttpGet]
     public IActionResult ShowDetails(int id)
     {
         var student = students.FirstOrDefault(e => e.Id == id);
@@ -27,10 +30,16 @@ public class StudentController : Controller
         }
         return View(student);
     }
+
+    // Ajouter un Student
+    // Accesible via /Student/Add en GET affichera le formulaire
+    [HttpGet]
     public IActionResult Add()
     {
         return View();
     }
+
+    // Accesible via /Student/Add en POST
     [HttpPost]
     public IActionResult Add(Student student)
     {
@@ -43,7 +52,8 @@ public class StudentController : Controller
         return View(student);
     }
 
-
+    // Modifier un Student
+    [HttpGet]
     public IActionResult Update(int id)
     {
         var student = students.FirstOrDefault(e => e.Id == id);
@@ -77,6 +87,9 @@ public class StudentController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    // Supprimer un Student
+    [HttpGet]
     public IActionResult Delete(int id)
     {
         var student = students.FirstOrDefault(e => e.Id == id);
