@@ -1,29 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
-
+using mvc.Data;
 namespace mvc.Controllers;
 
 public class StudentController : Controller
 {
-    //Création d'une liste statique de Student
-    private static List<Student> students = new()
+    // champ prive pour stocker le dbcontext
+    private readonly ApplicationDbContext contexts;
+
+    // Constructeur
+    public StudentController(ApplicationDbContext context)
     {
-        new() { AdmissionDate = new DateTime(2021, 5, 5), Age = 19, Firstname = "Yohann", GPA = 5.5, Id = 1, Lastname = "Mathieux", Major = Major.IT },
-        new() { AdmissionDate = new DateTime(2021, 9, 1), Age = 20, Firstname = "Patoche", GPA = 3.5, Id = 2, Lastname = "Ladébrouille", Major = Major.OTHER },
-    };
+        contexts = context;
+    }
 
     // GET: StudentController
     [HttpGet]
     public IActionResult Index()
     {
-        return View(students);
+        return View(contexts.Students);
     }
 
     // Afficher le détails d'un Student
     [HttpGet]
     public IActionResult ShowDetails(int id)
     {
-        var student = students.FirstOrDefault(e => e.Id == id);
+        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
         if (student == null)
         {
             return NotFound();
@@ -43,20 +45,21 @@ public class StudentController : Controller
     [HttpPost]
     public IActionResult Add(Student student)
     {
+
         if (ModelState.IsValid)
         {
-            student.Id = students.Max(e => e.Id) + 1;
-            students.Add(student);
+            contexts.Students.Add(student);
+            contexts.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-        return View(student);
+        return View(contexts.Students);
     }
 
     // Modifier un Student
     [HttpGet]
     public IActionResult Update(int id)
     {
-        var student = students.FirstOrDefault(e => e.Id == id);
+        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
         if (student == null)
         {
             return NotFound();
@@ -71,7 +74,7 @@ public class StudentController : Controller
             return View(updatedStudent);
         }
 
-        var student = students.FirstOrDefault(e => e.Id == updatedStudent.Id);
+        var student = contexts.Students.FirstOrDefault(e => e.Id == updatedStudent.Id);
         if (student == null)
         {
             return NotFound();
@@ -85,6 +88,8 @@ public class StudentController : Controller
         student.GPA = updatedStudent.GPA;
         student.Major = updatedStudent.Major;
 
+        contexts.SaveChanges();
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -92,7 +97,7 @@ public class StudentController : Controller
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        var student = students.FirstOrDefault(e => e.Id == id);
+        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
         if (student == null)
         {
             return NotFound();
@@ -103,10 +108,11 @@ public class StudentController : Controller
     [HttpPost, ActionName("Delete")]
     public IActionResult DeleteConfirmed(int id)
     {
-        var student = students.FirstOrDefault(e => e.Id == id);
+        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
         if (student != null)
         {
-            students.Remove(student);
+            contexts.Students.Remove(student);
+            contexts.SaveChanges();
         }
         return RedirectToAction(nameof(Index));
     }

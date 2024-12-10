@@ -6,10 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+var serverVersion = new MySqlServerVersion(new Version(11, 0, 2));
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseMySql("chaine de connexion", "version du serveur")
-);
-
+    options => options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), serverVersion)
+    );
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
