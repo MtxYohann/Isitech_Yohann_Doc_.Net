@@ -48,4 +48,28 @@ public class EventController : Controller
         return View("Index");
 
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete()
+    {
+        var events = await _contexts.Events.FirstOrDefaultAsync();
+        if (events == null)
+        {
+            return NotFound();
+        }
+        return View(events);
+    }
+    [HttpPost, ActionName("Delete")]
+    [Htt]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == id);
+        if (events != null)
+        {
+
+        }
+
+    }
+
 }
+
