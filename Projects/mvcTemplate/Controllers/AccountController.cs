@@ -6,12 +6,12 @@ using mvc.Data;
 
 public class AccountController : Controller
 {
-    private readonly ApplicationDbContext contexts;
+    private readonly ApplicationDbContext _contexts;
     private readonly SignInManager<Teacher> _signInManager;
     private readonly UserManager<Teacher> _userManager;
     public AccountController(ApplicationDbContext context, SignInManager<Teacher> signInManager, UserManager<Teacher> userManager)
     {
-        contexts = context;
+        _contexts = context;
         _signInManager = signInManager;
         _userManager = userManager;
     }
@@ -55,6 +55,32 @@ public class AccountController : Controller
 
     }
 
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var result = await _signInManager
+            .PasswordSignInAsync(model.Username!, model.Password!, model.RememberMe, false);
+
+        if (!result.Succeeded)
+        {
+            ModelState.AddModelError("", "Erreur lors de la connexion");
+            TempData["ErrorMessage"] = "Erreur lors de la connexion";
+            return View(model);
+        }
+
+        TempData["SuccessMessage"] = "Bienvenue sur votre tableau de bord !";
+        return RedirectToAction("Index", "Home");
+
+    }
 
     [HttpGet]
     public async Task<IActionResult> Logout()

@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+@model Event
+
+<h2>
+    <Address> add new Event</Address>
+</h2>
+
+<form asp-action="Add" asp-controller="Event" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EventDate"></label>
+        <input asp-for="EventDate" class="form-control" type="date" />
+        <span asp-validation-for="EventDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxParticipants"></label>
+        <input asp-for="MaxParticipants" class="form-control" />
+        <span asp-validation-for="MaxParticipants" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Add event" />
+
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to list</a>

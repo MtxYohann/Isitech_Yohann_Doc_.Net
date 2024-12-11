@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Event";
+}
+@model IEnumerable<Event>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Student Page</h1>
+</div>
+
+@foreach (var events in Model)
+{
+    <ul>
+        <li>Event: @Html.DisplayFor(m => events.Title)</li>
+        <li>Description: @Html.DisplayFor(m => events.Description)</li>
+        <li>Event EventDate: @Html.DisplayFor(m => events.EventDate)</li>
+        <li>Location: @Html.DisplayFor(m => events.Location)</li>
+        <li>Maximum participants: @Html.DisplayFor(m => events.MaxParticipants)</li>
+    </ul>
+}
+
+<a asp-action="Add" class="btn btn-info">
+    <Address> new Event</Address>
+</a>
