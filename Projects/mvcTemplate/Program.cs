@@ -7,28 +7,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDefaultIdentity<Teacher>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddRazorPages();
 
-builder.Services.AddIdentity<Teacher, IdentityRole>(options =>
-{
-    // Password settings.
-    options.Password.RequiredLength = 3;
-
-    // Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-
-}).AddEntityFrameworkStores<ApplicationDbContext>();
 
 
 
-var serverVersion = new MySqlServerVersion(new Version(11, 0, 2));
+
+var serverVersion = new MySqlServerVersion(new Version(11, 5, 2));
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), serverVersion)
     );
+
+
+builder.Services.AddIdentity<Teacher, IdentityRole>(options =>
+{
+
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Stores.MaxLengthForKeys = 128;
+    // Password settings.
+    options.Password.RequiredLength = 3;
+
+}).AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

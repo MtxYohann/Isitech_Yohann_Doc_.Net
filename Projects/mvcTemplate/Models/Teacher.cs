@@ -12,12 +12,9 @@ public class Teacher : IdentityUser
     // Variables d'instance
     public string Firstname { get; set; }
     public string Lastname { get; set; }
-
-    [DataType(DataType.Password)]
-    [Required]
-    public string? Password { get; set; }
     public bool RememberMe { get; set; }
     public int Age { get; set; }
     public Material Material { get; set; }
     public DateTime AdmissionDate { get; set; }
+    public string ConfirmedPassword { get; set; }
 }
