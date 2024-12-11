@@ -1,10 +1,12 @@
 using mvc.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 
 namespace mvc.Data;
 
 // Cette classe est une classe de contexte de base de donne
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<Teacher>
 {
     // Nous allons creer un dbset pour chaque table
     //Dbset est une classe qui représente une table
