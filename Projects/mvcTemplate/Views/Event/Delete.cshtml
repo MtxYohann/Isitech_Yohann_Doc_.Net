@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+@model mvc.Models.Event
+<div class="text-center">
+    <h2>Delete Event</h2>
+    <p>Are you sure you want to delete this event?</p>
+</div>
+<div>
+    <h4>Title :@Model.Title</h4>
+    <p>Description :@Model.Description</p>
+    <p>Date: @Model.EventDate.ToString("dd MMM yyyy")</p>
+    <p>Location :@Model.Location</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

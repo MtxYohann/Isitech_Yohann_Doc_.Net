@@ -1,8 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<mvc.Models.Event>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1>Upcoming Events This Week</h1>
 </div>
+
+@if (Model.Any())
+{
+    <ul>
+        @foreach (var eventItem in Model)
+        {
+            <li>
+                <h4>@eventItem.Title</h4>
+                <p>@eventItem.Description</p>
+                <p>Date: @eventItem.EventDate.ToString("dd MMM yyyy")</p>
+                <p>Location: @eventItem.Location</p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No events this week.</p>
+}

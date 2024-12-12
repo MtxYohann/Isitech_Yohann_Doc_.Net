@@ -19,35 +19,35 @@
                         <li class="navbar-brand">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="navbar-brand">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Student"
                                 asp-action="Index">Student list</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="navbar-brand">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Teacher"
                                 asp-action="Index">Teacher list</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="navbar-brand">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Event
                                 list</a>
                         </li>
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
+                            <li class="navbar-brand">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Add">Add new
                                     event</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navbar-brand">
                                 <a asp-action="Logout" asp-controller="Account" asp-route-id="" class="btn btn-primary"
                                     aria-current="page">Logout</a>
                             </li>
                         }
                         else
                         {
-                            <li class="nav-item">
+                            <li class="navbar-brand">
                                 <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navbar-brand">
                                 <a class="nav-link" href="@Url.Action("Register", "Account")">Register</a>
                             </li>
                         }

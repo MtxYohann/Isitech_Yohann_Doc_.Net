@@ -16,7 +16,7 @@ public class Event
     [DataType(DataType.DateTime)]
     public DateTime EventDate { get; set; }
     [Required]
-    [Range(10, 200)]
+    [Range(3, 200)]
     [Display(Name = "Maximum number of participants")]
     public int MaxParticipants { get; set; }
     [Required]
