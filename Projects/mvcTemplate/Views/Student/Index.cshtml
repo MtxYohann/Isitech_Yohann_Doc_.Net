@@ -6,17 +6,26 @@
 <div class="text-center">
     <h1 class="display-4">Welcome to the Student Page</h1>
 </div>
+<div class="event-list">
+    @foreach (var student in Model)
+    {
+        <div class="event-item">
+            <ul>
+                <li>@student.Firstname @student.Lastname</li>
+                <a asp-action="ShowDetails" asp-route-id="@student.Id" class="btn btn-secondary">Details</a>
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-action="Update" asp-route-id="@student.Id" class="btn btn-warning">Update</a>
+                    <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-danger">Delete</a>
+                }
+            </ul>
+        </div>
+    }
+    @if (User?.Identity?.IsAuthenticated == true)
+    {
+        <a asp-action="Add" class="btn btn-info">
+            new Student
+        </a>
+    }
 
-@foreach (var student in Model)
-{
-    <ul>
-        <li>@student.Firstname @student.Lastname</li>
-        <a asp-action="ShowDetails" asp-route-id="@student.Id" class="btn btn-secondary">Details</a>
-        <a asp-action="Update" asp-route-id="@student.Id" class="btn btn-warning">Update</a>
-        <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-danger">Delete</a>
-    </ul>
-}
-
-<a asp-action="Add" class="btn btn-info">
-    <Address> new Student</Address>
-</a>
+</div>

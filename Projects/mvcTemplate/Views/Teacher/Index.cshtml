@@ -2,20 +2,25 @@
     ViewData["Title"] = "Home Page";
 }
 @model IEnumerable<Teacher>
-<div class="container">
-    <div class="text-center">
-        <h1 class="display-4">Welcome to the Teacher Page</h1>
-    </div>
-    <ul>
-        @foreach (var teacher in Model)
-        {
-            <li>@teacher.Firstname @teacher.Lastname</li>
-            <a asp-action="ShowDetails" asp-route-id="@teacher.Id" class="btn btn-secondary">Details</a>
-            <a asp-action="Update" asp-route-id="@teacher.Id" class="btn btn-warning">Update</a>
-            <a asp-action="Delete" asp-route-id="@teacher.Id" class="btn btn-danger">Delete</a>
-        }
-    </ul>
-    <a asp-action="Add" class="btn btn-info">
-        <Address> new teacher</Address>
-    </a>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Teacher Page</h1>
+</div>
+<div class="event-list">
+
+    @foreach (var teacher in Model)
+    {
+        <div class="event-item">
+            <ul>
+                <li>@teacher.Firstname @teacher.Lastname</li>
+                <a asp-action="ShowDetails" asp-route-id="@teacher.Id" class="btn btn-secondary">Details</a>
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-action="Update" asp-route-id="@teacher.Id" class="btn btn-warning">Update</a>
+                    <a asp-action="Delete" asp-route-id="@teacher.Id" class="btn btn-danger">Delete</a>
+                }
+            </ul>
+        </div>
+    }
+
 </div>
