@@ -2,7 +2,7 @@
     ViewData["Title"] = "Create Event";
 }
 
-@model mvc.Models.Event
+@model Event
 <div class="text-center">
     <h2>Delete Event</h2>
     <p>Are you sure you want to delete this event?</p>
@@ -13,9 +13,22 @@
     <p>Date: @Model.EventDate.ToString("dd MMM yyyy")</p>
     <p>Location :@Model.Location</p>
 </div>
-
-<form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" name="id" value="@Model.Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+@if (ViewData["ConfirmDelete"] != null && (bool)ViewData["ConfirmDelete"])
+{
+    <!-- Bouton de validation finale -->
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Confirm deletion</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancek</a>
+    </form>
+}
+else
+{
+    <!-- Premier bouton de suppression -->
+    <form asp-action="Delete" method="get">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="hidden" name="confirm" value="true" />
+        <button type="submit" class="btn btn-warning">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+}

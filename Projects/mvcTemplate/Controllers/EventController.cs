@@ -39,10 +39,9 @@ public class EventController : Controller
         return View(events);
     }
 
-
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult> Update(int id)
+    public async Task<ActionResult> Update(int id, bool confirm = false)
     {
 
         var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == id);
@@ -58,15 +57,21 @@ public class EventController : Controller
             MaxParticipants = events.MaxParticipants,
             Location = events.Location
         };
+        ViewData["ConfirmUpdate"] = confirm;
         return View(model);
     }
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult> Update(Event model)
+    public async Task<ActionResult> Update(Event model, bool confirm = false)
     {
         if (!ModelState.IsValid)
         {
             TempData["ErrorMessage"] = "Error when editing";
+            return View(model);
+        }
+        if (!confirm)
+        {
+            ViewData["ConfirmUpdate"] = true;
             return View(model);
         }
         var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == model.Id);
@@ -79,53 +84,61 @@ public class EventController : Controller
 
         await _contexts.SaveChangesAsync();
 
+
         return RedirectToAction("Index", "Event");
 
     }
 
     [Authorize]
     [HttpGet]
-    public IActionResult Add()
+    public IActionResult Add(bool confirm = false)
     {
+        ViewData["ConfirmAdd"] = confirm;
         return View();
     }
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Add(Event model)
+    public async Task<IActionResult> Add(Event model, bool confirm = false)
     {
 
         if (!ModelState.IsValid)
         {
-            TempData["ErrorMessage"] = "Error when creating the event";
+            TempData["ErrorMessage"] = "Error when creating the event.";
             return View(model);
         }
 
+        if (!confirm)
+        {
+            ViewData["ConfirmAdd"] = true;
+            return View(model);
+        }
         await _contexts.AddAsync(model);
-
         await _contexts.SaveChangesAsync();
 
-        return View("Index");
+        TempData["SuccessMessage"] = "Event added successfully.";
+        return RedirectToAction("Index");
 
     }
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, bool confirm = false)
     {
         var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == id);
         if (events == null)
         {
             return NotFound();
         }
+        ViewData["ConfirmDelete"] = confirm;
         return View(events);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> DeleteConfirmed(Event model)
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == model.Id);
+        var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == id);
         if (events == null)
         {
             TempData["ErrorMessage"] = "Event not found.";

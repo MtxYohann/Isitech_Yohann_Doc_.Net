@@ -11,14 +11,15 @@
     @foreach (var teacher in Model)
     {
         <div class="event-item">
+            <a asp-action="ShowDetails" asp-route-id="@teacher.Id" class="btn btn-secondary">Details</a>
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <a asp-action="Update" asp-route-id="@teacher.Id" class="btn btn-warning">Update</a>
+                <a asp-action="Delete" asp-route-id="@teacher.Id" class="btn btn-danger">Delete</a>
+            }
             <ul>
                 <li>@teacher.Firstname @teacher.Lastname</li>
-                <a asp-action="ShowDetails" asp-route-id="@teacher.Id" class="btn btn-secondary">Details</a>
-                @if (User?.Identity?.IsAuthenticated == true)
-                {
-                    <a asp-action="Update" asp-route-id="@teacher.Id" class="btn btn-warning">Update</a>
-                    <a asp-action="Delete" asp-route-id="@teacher.Id" class="btn btn-danger">Delete</a>
-                }
+
             </ul>
         </div>
     }

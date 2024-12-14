@@ -10,14 +10,15 @@
     @foreach (var student in Model)
     {
         <div class="event-item">
+            <a asp-action="ShowDetails" asp-route-id="@student.Id" class="btn btn-secondary">Details</a>
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <a asp-action="Update" asp-route-id="@student.Id" class="btn btn-warning">Update</a>
+                <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-danger">Delete</a>
+            }
             <ul>
                 <li>@student.Firstname @student.Lastname</li>
-                <a asp-action="ShowDetails" asp-route-id="@student.Id" class="btn btn-secondary">Details</a>
-                @if (User?.Identity?.IsAuthenticated == true)
-                {
-                    <a asp-action="Update" asp-route-id="@student.Id" class="btn btn-warning">Update</a>
-                    <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-danger">Delete</a>
-                }
+
             </ul>
         </div>
     }
