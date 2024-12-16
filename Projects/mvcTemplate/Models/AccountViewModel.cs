@@ -16,9 +16,7 @@ namespace mvc.Models
 
         public string Lastname { get; set; }
 
-        public bool RememberMe { get; set; }
         public int Age { get; set; }
-        public Material Material { get; set; }
         public DateTime AdmissionDate { get; set; }
 
     }

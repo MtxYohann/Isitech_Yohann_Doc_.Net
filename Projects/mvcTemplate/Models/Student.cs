@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace mvc.Models;
 
@@ -6,16 +7,11 @@ public enum Major
 {
     CS, IT, MATHS, OTHER
 }
-public class Student
+public class Student : User
 {
     // Variables d'instance
     public int Id { get; set; }
     [Required, StringLength(20)]
-    public string Firstname { get; set; }
-    [Required]
-    public string Lastname { get; set; }
-    [Required]
-    public int Age { get; set; }
     public double GPA { get; set; }
     [Required]
     public Major Major { get; set; }

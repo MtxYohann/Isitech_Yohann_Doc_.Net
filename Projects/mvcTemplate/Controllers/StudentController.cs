@@ -1,119 +1,132 @@
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
 using mvc.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+
 namespace mvc.Controllers;
 
 public class StudentController : Controller
 {
-    // champ prive pour stocker le dbcontext
-    private readonly ApplicationDbContext contexts;
+    private readonly ApplicationDbContext _contexts;
+    private readonly UserManager<Student> _usermanager;
 
-    // Constructeur
-    public StudentController(ApplicationDbContext context)
+    private List<Student> students = new List<Student>
     {
-        contexts = context;
+    };
+    public StudentController(ApplicationDbContext context, UserManager<Student> userManager)
+    {
+        _contexts = context;
+        _usermanager = userManager;
     }
+
 
     // GET: StudentController
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index(int id)
     {
-        return View(contexts.Students);
-    }
+        var students = await _usermanager.Users.ToListAsync<Student>();
 
-    // Afficher le détails d'un Student
+        return View(students);
+    }
     [HttpGet]
-    public IActionResult ShowDetails(int id)
+    public async Task<IActionResult> ShowDetails()
     {
-        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
+
+        var student = await _usermanager.Users.FirstOrDefaultAsync();
+
         if (student == null)
         {
-            return NotFound();
+            return NotFound("Student not found");
         }
+
         return View(student);
-    }
 
-    // Ajouter un Student
-    // Accesible via /Student/Add en GET affichera le formulaire
-    [HttpGet]
-    public IActionResult Add()
-    {
-        return View();
-    }
-
-    // Accesible via /Student/Add en POST
-    [HttpPost]
-    public IActionResult Add(Student student)
-    {
-
-        if (ModelState.IsValid)
-        {
-            contexts.Students.Add(student);
-            contexts.SaveChanges();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(contexts.Students);
     }
 
     // Modifier un Student
     [HttpGet]
-    public IActionResult Update(int id)
+    public async Task<IActionResult> Update(int id)
     {
-        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
+        var student = await _usermanager.Users.FirstOrDefaultAsync();
         if (student == null)
         {
-            return NotFound();
+            return NotFound("Student not found");
         }
-        return View(student);
+
+        var viewModel = new StudentUpdateViewModel
+        {
+            Firstname = student.Firstname,
+            Lastname = student.Lastname,
+            Age = student.Age,
+            Major = student.Major
+        };
+
+        return View(viewModel);
     }
+
     [HttpPost]
-    public IActionResult Update(Student updatedStudent)
+    public async Task<IActionResult> Update(StudentUpdateViewModel updatedStudent)
     {
         if (!ModelState.IsValid)
         {
             return View(updatedStudent);
         }
 
-        var student = contexts.Students.FirstOrDefault(e => e.Id == updatedStudent.Id);
+        var student = await _usermanager.Users.FirstOrDefaultAsync();
         if (student == null)
         {
-            return NotFound();
+            return NotFound("Student not found");
         }
 
-        // Mise à jour des propriétés de l'étudiant
         student.Firstname = updatedStudent.Firstname;
         student.Lastname = updatedStudent.Lastname;
         student.Age = updatedStudent.Age;
-        student.AdmissionDate = updatedStudent.AdmissionDate;
-        student.GPA = updatedStudent.GPA;
         student.Major = updatedStudent.Major;
 
-        contexts.SaveChanges();
+        var result = await _usermanager.UpdateAsync(student);
+        if (!result.Succeeded)
+        {
+            ModelState.AddModelError("", "Failed to update the student");
+            return View(updatedStudent);
+        }
 
         return RedirectToAction(nameof(Index));
     }
 
+
+
     // Supprimer un Student
     [HttpGet]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete()
     {
-        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
+        var student = await _usermanager.Users.FirstOrDefaultAsync();
         if (student == null)
         {
             return NotFound();
         }
         return View(student);
     }
-
     [HttpPost, ActionName("Delete")]
-    public IActionResult DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(Student model)
     {
-        var student = contexts.Students.FirstOrDefault(e => e.Id == id);
-        if (student != null)
+        var students = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
+        if (students == null)
         {
-            contexts.Students.Remove(student);
-            contexts.SaveChanges();
+            TempData["ErrorMessage"] = "Student not found.";
+            return RedirectToAction(nameof(Index));
         }
+
+        var result = await _usermanager.DeleteAsync(students);
+        if (!result.Succeeded)
+        {
+            TempData["ErrorMessage"] = "Failed to delete the student.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["SuccessMessage"] = "Student deleted successfully.";
         return RedirectToAction(nameof(Index));
     }
 }
