@@ -30,3 +30,9 @@
     <input asp-for="Age" class="form-control" />
     <span asp-validation-for="Age" class="text-danger"></span>
 </div>
+<div>
+        <label asp-for="Material">Matière</label>
+        <select asp-for="Material" asp-items="Html.GetEnumSelectList<Material>()" class="form-control">
+            <option value="">-- Sélectionner une matière --</option>
+        </select>
+</div>

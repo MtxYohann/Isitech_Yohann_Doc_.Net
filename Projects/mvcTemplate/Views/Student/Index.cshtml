@@ -1,7 +1,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@model IEnumerable<Student>
+@model IEnumerable<User>
 
 <div class="text-center">
     <h1 class="display-4">Welcome to the Student Page</h1>
@@ -24,7 +24,7 @@
     }
     @if (User?.Identity?.IsAuthenticated == true)
     {
-        <a asp-action="Add" class="btn btn-info">
+        <a href="@Url.Action("StudentRegister", "Account")" class="btn btn-info">
             new Student
         </a>
     }

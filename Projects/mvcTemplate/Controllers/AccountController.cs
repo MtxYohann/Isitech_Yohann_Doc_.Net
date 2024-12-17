@@ -31,20 +31,21 @@ public class AccountController : Controller
 
         var teacher = new User
         {
-            UserName = model.Email,
+            UserName = model.Firstname + model.Lastname,
             Email = model.Email,
             Firstname = model.Firstname,
-            Lastname = model.Lastname
+            Lastname = model.Lastname,
+            Material = model.Material
         };
 
         var result = await _userManager.CreateAsync(teacher, model.Password);
         if (result.Succeeded)
         {
-            if (!await _roleManager.RoleExistsAsync("Prof"))
+            if (!await _roleManager.RoleExistsAsync("Teacher"))
             {
-                await _roleManager.CreateAsync(new IdentityRole("Prof"));
+                await _roleManager.CreateAsync(new IdentityRole("Teacher"));
             }
-            await _userManager.AddToRoleAsync(teacher, "Prof");
+            await _userManager.AddToRoleAsync(teacher, "Teacher");
 
             await _signInManager.SignInAsync(teacher, isPersistent: false);
             return RedirectToAction("Index", "Home");
@@ -78,8 +79,7 @@ public class AccountController : Controller
             Firstname = model.Firstname,
             Lastname = model.Lastname,
             Email = model.Email,
-            Age = model.Age,
-            AdmissionDate = model.AdmissionDate,
+            Major = model.Major
         };
 
         var result = await _userManager.CreateAsync(student, model.Password);
@@ -108,6 +108,7 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
+        model.RememberMe = false;
         var result = await _signInManager
             .PasswordSignInAsync(model.Username!, model.Password!, model.RememberMe, false);
 

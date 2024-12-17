@@ -1,7 +1,4 @@
-public enum Material
-{
-    CS, IT, MATHS, OTHER
-}
+
 
 namespace mvc.Models
 {
@@ -18,6 +15,7 @@ namespace mvc.Models
 
         public int Age { get; set; }
         public DateTime AdmissionDate { get; set; }
-
+        public Material Material { get; set; }
+        public Major Major {get;set;}
     }
 }

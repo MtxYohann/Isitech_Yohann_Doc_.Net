@@ -9,10 +9,10 @@ public class EventController : Controller
 {
     private readonly ApplicationDbContext _contexts;
 
-    private readonly UserManager<Teacher> _userManager;
+    private readonly UserManager<User> _userManager;
 
 
-    public EventController(ApplicationDbContext context, UserManager<Teacher> userManager)
+    public EventController(ApplicationDbContext context, UserManager<User> userManager)
     {
         _contexts = context;
         _userManager = userManager;

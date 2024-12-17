@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace mvc.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class TestMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,12 +44,10 @@ namespace mvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Lastname = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RememberMe = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AdmissionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Material = table.Column<int>(type: "int", nullable: false),
-                    AdmissionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ConfirmedPassword = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Major = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -80,23 +78,24 @@ namespace mvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Students",
+                name: "Events",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Firstname = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                    Title = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Lastname = table.Column<string>(type: "longtext", nullable: false)
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    GPA = table.Column<double>(type: "double", nullable: false),
-                    Major = table.Column<int>(type: "int", nullable: false),
-                    AdmissionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    EventDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    MaxParticipants = table.Column<int>(type: "int", nullable: false),
+                    Location = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.PrimaryKey("PK_Events", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -284,7 +283,7 @@ namespace mvc.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

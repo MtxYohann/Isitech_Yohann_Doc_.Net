@@ -11,12 +11,12 @@ namespace mvc.Controllers;
 public class TeacherController : Controller
 {
     private readonly ApplicationDbContext _contexts;
-    private readonly UserManager<Teacher> _usermanager;
+    private readonly UserManager<User> _usermanager;
 
-    private List<Teacher> teachers = new List<Teacher>
+    private List<User> teachers = new List<User>
     {
     };
-    public TeacherController(ApplicationDbContext context, UserManager<Teacher> userManager)
+    public TeacherController(ApplicationDbContext context, UserManager<User> userManager)
     {
         _contexts = context;
         _usermanager = userManager;
@@ -27,15 +27,15 @@ public class TeacherController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(int id)
     {
-        var teachers = await _usermanager.Users.ToListAsync<Teacher>();
+        var teachers = await _usermanager.GetUsersInRoleAsync("Teacher");
 
         return View(teachers);
     }
     [HttpGet]
-    public async Task<IActionResult> ShowDetails()
+    public async Task<IActionResult> ShowDetails(Teacher model)
     {
 
-        var teacher = await _usermanager.Users.FirstOrDefaultAsync();
+        var teacher = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
 
         if (teacher == null)
         {
@@ -48,9 +48,9 @@ public class TeacherController : Controller
 
     // Modifier un Teacher
     [HttpGet]
-    public async Task<IActionResult> Update(int id)
+    public async Task<IActionResult> Update(Teacher model)
     {
-        var teacher = await _usermanager.Users.FirstOrDefaultAsync();
+        var teacher = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
         if (teacher == null)
         {
             return NotFound("Teacher not found");
@@ -100,9 +100,9 @@ public class TeacherController : Controller
 
     // Supprimer un Teacher
     [HttpGet]
-    public async Task<IActionResult> Delete()
+    public async Task<IActionResult> Delete(Teacher model)
     {
-        var teacher = await _usermanager.Users.FirstOrDefaultAsync();
+        var teacher = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
         if (teacher == null)
         {
             return NotFound();

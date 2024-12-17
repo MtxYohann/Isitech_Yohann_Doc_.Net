@@ -10,10 +10,11 @@ public enum Major
 public class Student : User
 {
     // Variables d'instance
-    public int Id { get; set; }
+    public string Firstname {get;set; }
+    public string Lastname {get;set; }
+    public int Age {get;set; }
     [Required, StringLength(20)]
-    public double GPA { get; set; }
-    [Required]
+    
     public Major Major { get; set; }
     public DateTime AdmissionDate { get; set; }
 }

@@ -11,12 +11,12 @@ namespace mvc.Controllers;
 public class StudentController : Controller
 {
     private readonly ApplicationDbContext _contexts;
-    private readonly UserManager<Student> _usermanager;
+    private readonly UserManager<User> _usermanager;
 
-    private List<Student> students = new List<Student>
+    private List<User> students = new List<User>
     {
     };
-    public StudentController(ApplicationDbContext context, UserManager<Student> userManager)
+    public StudentController(ApplicationDbContext context, UserManager<User> userManager)
     {
         _contexts = context;
         _usermanager = userManager;
@@ -25,17 +25,17 @@ public class StudentController : Controller
 
     // GET: StudentController
     [HttpGet]
-    public async Task<IActionResult> Index(int id)
+    public async Task<IActionResult> Index()
     {
-        var students = await _usermanager.Users.ToListAsync<Student>();
+        var students = await _usermanager.GetUsersInRoleAsync("Student");
 
         return View(students);
     }
     [HttpGet]
-    public async Task<IActionResult> ShowDetails()
+    public async Task<IActionResult> ShowDetails(Student model)
     {
 
-        var student = await _usermanager.Users.FirstOrDefaultAsync();
+        var student = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
 
         if (student == null)
         {
@@ -48,9 +48,9 @@ public class StudentController : Controller
 
     // Modifier un Student
     [HttpGet]
-    public async Task<IActionResult> Update(int id)
+    public async Task<IActionResult> Update(Student model)
     {
-        var student = await _usermanager.Users.FirstOrDefaultAsync();
+        var student = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
         if (student == null)
         {
             return NotFound("Student not found");
@@ -100,9 +100,9 @@ public class StudentController : Controller
 
     // Supprimer un Student
     [HttpGet]
-    public async Task<IActionResult> Delete()
+    public async Task<IActionResult> Delete(Student model)
     {
-        var student = await _usermanager.Users.FirstOrDefaultAsync();
+        var student = await _usermanager.Users.FirstOrDefaultAsync(e => e.Id == model.Id);
         if (student == null)
         {
             return NotFound();
