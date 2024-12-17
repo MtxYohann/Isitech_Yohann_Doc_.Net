@@ -24,4 +24,6 @@ public class Event
     public string Location { get; set; }
     [Display(Name = "Creation date")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
 }

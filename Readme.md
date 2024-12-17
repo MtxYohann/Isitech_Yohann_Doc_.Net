@@ -29,7 +29,7 @@ dotnet run
 ## Contexte
 
 Ce projet est une application web pour la gestion d'événements dans un établissement scolaire.
-## Utilisation de l'application
+## L'application
 
 Les enseignants peuvent se connecter et créer un compte pour pouvoir accéder à certains provilèges :
 Pouvoir Créer Modifier ou Supprimer un evenement, un étudiant ou un enseignants.
@@ -40,6 +40,19 @@ La page d'accueil liste les événements à venir dans la semaine.
 Les pages de liste des étudiants, enseignants et événements affichent une liste avec un bouton de détails. Si on est connecté, on verra également les boutons de mise à jour (update), suppression (delete) et ajout (add). Ces pages sont protégées ; il faut être identifié pour y avoir accès.
 
 Dans la page de liste des événements, on peut utiliser un filtre pour trier les événements par date ou par nom.
+
+Les étudiants peuvent s'inscrire à un événement.
+
+## Utilisation conseillé pour tester l'application
+
+1. Créer un Enseignant
+2. Créer un event 
+3. Créer un étudiant
+4. explorer les différents menu (possibilité de modifier, supprimer les étudiants, événements, Enseignants)
+5. Se déconnecter
+6. Se connecter avec le compte étudiant
+7. S'inscrire à un événement
+
 
 # Cours .NET 
 ## Note

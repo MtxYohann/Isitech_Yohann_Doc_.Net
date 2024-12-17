@@ -20,6 +20,8 @@ public class EventController : Controller
     public async Task<IActionResult> Index(string searchTitle, DateTime? searchDate)
     {
         var eventsQuery = _contexts.Events.AsQueryable();
+        
+        eventsQuery = eventsQuery.Include(e => e.UserEvents);
 
         if (!string.IsNullOrEmpty(searchTitle))
         {
@@ -149,6 +151,65 @@ public class EventController : Controller
         await _contexts.SaveChangesAsync();
 
         TempData["SuccessMessage"] = "Event deleted successfully.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [Authorize(Roles = "Student")]
+    public async Task<IActionResult> Details(int id)
+    {
+        var eventDetails = await _contexts.Events
+            .Include(e => e.UserEvents)
+            .ThenInclude(ue => ue.User)
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+        if (eventDetails == null)
+        {
+            return NotFound();
+        }
+
+        ViewData["CurrentParticipants"] = eventDetails.UserEvents.Count;
+        return View(eventDetails);
+    }
+    [Authorize(Roles = "Student")]
+    [HttpPost]
+    public async Task<IActionResult> JoinEvent(int id)
+    {
+        var user = await _userManager.GetUserAsync(User); // Récupère l'utilisateur actuel
+        var eventToJoin = await _contexts.Events.Include(e => e.UserEvents).FirstOrDefaultAsync(e => e.Id == id);
+
+        if (eventToJoin == null)
+        {
+            return NotFound();
+        }
+
+        // Vérifie si le nombre de participants est inférieur au nombre maximum
+        if (eventToJoin.UserEvents.Count >= eventToJoin.MaxParticipants)
+        {
+            TempData["ErrorMessage"] = "Sorry, this event is full.";
+            return RedirectToAction("Details", new { id });
+        }
+
+        // Vérifie si l'utilisateur est déjà inscrit
+        var existingUserEvent = await _contexts.UserEvents
+            .FirstOrDefaultAsync(ue => ue.UserId == user.Id && ue.EventId == eventToJoin.Id);
+
+        if (existingUserEvent != null)
+        {
+            TempData["ErrorMessage"] = "You are already registered for this event.";
+            return RedirectToAction("Details", new { id });
+        }
+
+        // Crée une nouvelle inscription
+        var userEvent = new UserEvent
+        {
+            UserId = user.Id,
+            EventId = eventToJoin.Id
+        };
+
+        _contexts.UserEvents.Add(userEvent);
+        await _contexts.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Successfully registered for the event!";
         return RedirectToAction(nameof(Index));
     }
 

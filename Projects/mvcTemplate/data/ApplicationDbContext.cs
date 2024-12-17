@@ -12,10 +12,18 @@ public class ApplicationDbContext : IdentityDbContext<User>
     //ELle permet de faire le mapping entre la table et la classe C#
 
     public DbSet<Event> Events { get; set; }
-
+    public DbSet<UserEvent> UserEvents { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+
+    }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<UserEvent>()
+            .HasKey(ue => new { ue.UserId, ue.EventId });
 
     }
 

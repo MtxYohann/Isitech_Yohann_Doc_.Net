@@ -1,0 +1,15 @@
+@model mvc.Models.Event
+
+<h1>@Model.Title</h1>
+<p>@Model.Description</p>
+<p><strong>Date:</strong> @Model.EventDate</p>
+<p><strong>Location:</strong> @Model.Location</p>
+<p><strong>Participants:</strong> @ViewData["CurrentParticipants"] / @Model.MaxParticipants</p>
+
+@if (User.IsInRole("Student"))
+{
+    <form asp-action="JoinEvent" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-primary">Join Event</button>
+    </form>
+}

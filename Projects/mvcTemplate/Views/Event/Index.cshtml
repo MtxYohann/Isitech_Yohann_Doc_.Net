@@ -19,24 +19,42 @@
     @if (User.IsInRole("Teacher"))
     {
         <a asp-action="Add" class="btn btn-info">
-            new Event
+            New Event
         </a>
     }
-    @foreach (var events in Model)
+
+    @foreach (var eventItem in Model)
     {
         <div class="event-item">
-            @if (User?.Identity?.IsAuthenticated == true)
-            {
-                <a asp-action="Delete" asp-route-id="@events.Id" class="btn btn-danger">Delete</a>
-                <a asp-action="Update" asp-route-id="@events.Id" class="btn btn-warning">Update</a>
-            }
-            <h3>Event: @Html.DisplayFor(m => events.Title)</h3>
+            <h3>Event: @Html.DisplayFor(m => eventItem.Title)</h3>
             <ul>
-                <li>Description: @Html.DisplayFor(m => events.Description)</li>
-                <li>Event EventDate: @Html.DisplayFor(m => events.EventDate)</li>
-                <li>Location: @Html.DisplayFor(m => events.Location)</li>
-                <li>Maximum participants: @Html.DisplayFor(m => events.MaxParticipants)</li>
+                <li>Description: @Html.DisplayFor(m => eventItem.Description)</li>
+                <li>Event Date: @Html.DisplayFor(m => eventItem.EventDate)</li>
+                <li>Location: @Html.DisplayFor(m => eventItem.Location)</li>
+                <li>Participants: @eventItem.UserEvents.Count/@eventItem.MaxParticipants</li>
             </ul>
+
+            
+                @if (User.IsInRole("Teacher"))
+                {
+                    <a asp-action="Update" asp-route-id="@eventItem.Id" class="btn btn-warning">Update</a>
+                    <a asp-action="Delete" asp-route-id="@eventItem.Id" class="btn btn-danger">Delete</a>
+                }
+                @if (User.IsInRole("Student"))
+                {
+                    <!-- Formulaire pour que l'étudiant puisse rejoindre l'événement -->
+                    <form method="post" asp-action="JoinEvent" asp-route-id="@eventItem.Id">
+                        <button type="submit" class="btn btn-success" @if (eventItem.UserEvents.Count >= eventItem.MaxParticipants) {} >
+                            @if (eventItem.UserEvents.Count >= eventItem.MaxParticipants) {
+                                <text>Event Full</text>
+                            }
+                            else {
+                                <text>Join Event</text>
+                            }
+                        </button>
+                    </form>
+                }
+            
         </div>
     }
 </div>

@@ -32,26 +32,36 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Event
                                 list</a>
                         </li>
-                        @if (User.IsInRole("Teacher"))
+                        @if (User?.Identity?.IsAuthenticated == true)
                         {
-                            <li class="navbar-brand">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Add">Add new
-                                    event</a>
-                            </li>
-                            <li class="navbar-brand">
-                                <a asp-action="Logout" asp-controller="Account" asp-route-id="" class="btn btn-primary"
-                                    aria-current="page">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="navbar-brand">
-                                <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
-                            </li>
-                            <li class="navbar-brand">
-                                <a class="nav-link" href="@Url.Action("TeacherRegister", "Account")">Register</a>
-                            </li>
-                        }
+                            if (User.IsInRole("Teacher"))
+                            {
+                                <li class="navbar-brand">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Add">Add new
+                                        event</a>
+                                </li>
+                                <li class="navbar-brand">
+                                    <a asp-action="Logout" asp-controller="Account" asp-route-id="" class="btn btn-primary"
+                                        aria-current="page">Logout</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Student"))
+                            {
+                                <li class="navbar-brand">
+                                    <a asp-action="Logout" asp-controller="Account" asp-route-id="" class="btn btn-primary"
+                                        aria-current="page">Logout</a>
+                                </li>
+                            }
+                            
+                        }else
+                            {
+                                <li class="navbar-brand">
+                                    <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
+                                </li>
+                                <li class="navbar-brand">
+                                    <a class="nav-link" href="@Url.Action("TeacherRegister", "Account")">Register</a>
+                                </li>
+                            }
                     </ul>
                 </div>
             </div>

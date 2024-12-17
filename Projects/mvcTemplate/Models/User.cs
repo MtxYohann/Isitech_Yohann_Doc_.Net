@@ -12,5 +12,6 @@ public class User : IdentityUser
     public int Age { get; set; }
     public Material Material { get; set; }
     public Major Major { get; set; }
+    public ICollection<UserEvent> UserEvents { get; set; }
 
 }
