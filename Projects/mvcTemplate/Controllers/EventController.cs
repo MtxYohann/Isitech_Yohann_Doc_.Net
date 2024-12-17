@@ -40,7 +40,7 @@ public class EventController : Controller
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "Teacher")]
     public async Task<ActionResult> Update(int id, bool confirm = false)
     {
 
@@ -61,7 +61,7 @@ public class EventController : Controller
         return View(model);
     }
     [HttpPost]
-    [Authorize]
+    [Authorize(Roles = "Teacher")]
     public async Task<ActionResult> Update(Event model, bool confirm = false)
     {
         if (!ModelState.IsValid)
@@ -89,14 +89,14 @@ public class EventController : Controller
 
     }
 
-    [Authorize]
+    [Authorize(Roles = "Teacher")]
     [HttpGet]
     public IActionResult Add(bool confirm = false)
     {
         ViewData["ConfirmAdd"] = confirm;
         return View();
     }
-    [Authorize]
+    [Authorize(Roles = "Teacher")]
     [HttpPost]
     public async Task<IActionResult> Add(Event model, bool confirm = false)
     {
@@ -121,7 +121,7 @@ public class EventController : Controller
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "Teacher")]
     public async Task<IActionResult> Delete(int id, bool confirm = false)
     {
         var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == id);
@@ -135,7 +135,7 @@ public class EventController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize]
+    [Authorize(Roles = "Teacher")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var events = await _contexts.Events.FirstOrDefaultAsync(e => e.Id == id);

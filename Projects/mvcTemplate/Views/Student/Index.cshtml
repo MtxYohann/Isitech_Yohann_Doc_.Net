@@ -11,7 +11,7 @@
     {
         <div class="event-item">
             <a asp-action="ShowDetails" asp-route-id="@student.Id" class="btn btn-secondary">Details</a>
-            @if (User?.Identity?.IsAuthenticated == true)
+            @if (User.IsInRole("Teacher"))
             {
                 <a asp-action="Update" asp-route-id="@student.Id" class="btn btn-warning">Update</a>
                 <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-danger">Delete</a>
@@ -22,7 +22,7 @@
             </ul>
         </div>
     }
-    @if (User?.Identity?.IsAuthenticated == true)
+    @if (User.IsInRole("Teacher"))
     {
         <a href="@Url.Action("StudentRegister", "Account")" class="btn btn-info">
             new Student

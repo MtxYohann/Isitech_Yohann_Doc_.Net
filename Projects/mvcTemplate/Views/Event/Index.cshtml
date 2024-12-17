@@ -16,7 +16,7 @@
 </div>
 
 <div class="event-list">
-    @if (User?.Identity?.IsAuthenticated == true)
+    @if (User.IsInRole("Teacher"))
     {
         <a asp-action="Add" class="btn btn-info">
             new Event

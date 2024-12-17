@@ -32,12 +32,13 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Event
                                 list</a>
                         </li>
-                        @if (User?.Identity?.IsAuthenticated == true)
+                        
+                        <li class="navbar-brand">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Add">Add new
+                                event</a>
+                        </li>
+                        @if (User.IsInRole("Teacher"))
                         {
-                            <li class="navbar-brand">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Add">Add new
-                                    event</a>
-                            </li>
                             <li class="navbar-brand">
                                 <a asp-action="Logout" asp-controller="Account" asp-route-id="" class="btn btn-primary"
                                     aria-current="page">Logout</a>
